@@ -22,15 +22,11 @@ def handle_drop(event):
     try:
         # Check if file is a supported image format
         image_formats = (".jpg", ".jpeg", ".png", ".bmp", ".gif", ".tiff", ".ico")
-        data_formatted = r'%s' % event.data.lower()
-        #data_formatted = event.data.lower()
-        data_formatted = data_formatted.replace(" ","")
-        if not data_formatted.endswith(image_formats):
-            print(event.data)
+        if not event.data.lower().endswith(image_formats):
             raise ValueError("Invalid image file format")
-        print(event.data)
+        
         # Open and display the image
-        img = Image.open(data_formatted)
+        img = Image.open(event.data)
         hei = img.size[0]
         wid = img.size[1]
         new_width, new_height = 150, 150
@@ -47,7 +43,6 @@ def handle_drop(event):
         resolutionLabel.configure(text=f"{hei} x {wid}")
     
     except Exception as e:
-        print(e)
         default_image_label.configure(text=str(e))
         resolutionLabel.configure(text="")
 
@@ -55,7 +50,7 @@ def convert():
     try:
         # Get the input image path
         input_path = default_image_label.image_path
-        print(input_path)
+        
         # Check if the input file is a supported image format
         image_formats = (".jpg", ".jpeg", ".png", ".bmp", ".gif", ".tiff", ".ico")
         if not input_path.lower().endswith(image_formats):
