@@ -20,6 +20,10 @@ Or run app.py to use on other operating systems.
 For running the python code install the requirements.<br>
 ```pip install -r requirements.txt```
 
+### Future
+- Adding an option to keep aspect ratio.<br>
+- Cross image format conversion (png>jpeg, ico>bmp)
+
 ### Image formats supported.
 - JPEG (.jpg or .jpeg)
 - PNG (.png)
