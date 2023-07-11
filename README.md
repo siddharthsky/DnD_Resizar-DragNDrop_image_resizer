@@ -16,6 +16,10 @@ This is a simple Python application that allows you to resize images by dragging
 2. This will open the app in a new window.
    
 3. You can then drag and drop images onto the screen to resize them.
+   
+4. Enter desired image resolution and press `Resize`
+
+5. The resizer file will be save in new folder called "Output"
 
 
 
