@@ -116,6 +116,7 @@ root_x = 350
 root_y = 450
 root.geometry(f"{root_x}x{root_y}")
 root.title("DnD Image Resizer")
+root.iconbitmap("root_icon.ico")
 header_label = ctk.CTkLabel(master=root,
                                       text='Add image to resize',
                                       font=(None,24))
