@@ -11,12 +11,14 @@ This is a simple Python application that allows you to resize images by dragging
 
 
 ### Usage
-Just open the Executable (.exe) and use.
-Or Just run app.py to use on other operating systems.
+Just open the Executable (.exe) and use.<br>
+Or run app.py to use on other operating systems.
 
 > **Note** Executable is only available for Windows 8 and above.
 
-
+### Requirements<br>
+For running the python code install the requirements.<br>
+```pip install -r requirements.txt```
 
 ### Image formats supported.
 - JPEG (.jpg or .jpeg)
@@ -26,4 +28,10 @@ Or Just run app.py to use on other operating systems.
 - TIFF (.tiff)
 - ICO (.ico)
 - WebP (.webp)
+
+### Contributing<br>
+Contributions are always welcome! If you find a bug or have an idea for a new feature, please open an issue or submit a pull request.
+
+### License<br>
+This project is licensed under the MIT License. See the LICENSE file for details.
 
