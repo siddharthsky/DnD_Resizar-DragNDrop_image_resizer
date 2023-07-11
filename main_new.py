@@ -116,7 +116,7 @@ root_x = 350
 root_y = 450
 root.geometry(f"{root_x}x{root_y}")
 root.title("DnD Image Resizer")
-root.iconbitmap("root_icon.ico")
+root.iconbitmap(r"resources\root_icon.ico")
 header_label = ctk.CTkLabel(master=root,
                                       text='Add image to resize',
                                       font=(None,24))
@@ -143,7 +143,7 @@ checkbox.pack(anchor="center")
 
 
 # Load the default image file and create a PhotoImage object
-default_img = Image.open("drag-drop.png")
+default_img = Image.open(r"resources\drag-drop.png")
 default_img = default_img.resize((150, 150), Image.BICUBIC)
 default_img_tk = ImageTk.PhotoImage(default_img)
 
