@@ -74,7 +74,7 @@ def convert():
         input_path = default_image_label.image_path
         print(input_path)
         # Check if the input file is a supported image format
-        image_formats = (".jpg", ".jpeg", ".png", ".bmp", ".gif", ".tiff", ".ico")
+        image_formats = (".jpg", ".jpeg", ".png", ".bmp", ".gif", ".tiff", ".ico",".webp")
         if not input_path.lower().endswith(image_formats):
             raise ValueError("Invalid image file format")
         
@@ -115,7 +115,7 @@ root = Tk()
 root_x = 350
 root_y = 450
 root.geometry(f"{root_x}x{root_y}")
-root.title("DnD Image Resizer")
+root.title("DnD Image Resizar")
 root.iconbitmap(r"resources\root_icon.ico")
 header_label = ctk.CTkLabel(master=root,
                                       text='Add image to resize',
