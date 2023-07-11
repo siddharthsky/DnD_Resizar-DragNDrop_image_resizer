@@ -11,14 +11,25 @@ This is a simple Python application that allows you to resize images by dragging
 
 
 ### Usage
-Just open the Executable (.exe) and use.<br>
-Or run app.py to use on other operating systems.
+1. Open the Executable (Resizar.exe)
+
+2. This will open the app in a new window.
+   
+3. You can then drag and drop images onto the screen to resize them.
+
+
 
 > **Note** Executable is only available for Windows 8 and above.
+
+Or run app.py to use on other operating systems.
 
 ### Requirements<br>
 For running the python code install the requirements.<br>
 ```pip install -r requirements.txt```
+
+### Screenshots
+
+  <img src="https://i.imgur.com/eSRzG5y.png">
 
 ### Future
 - Adding an option to keep aspect ratio.<br>
