@@ -26,17 +26,23 @@ def get_aspect_ratio(width, height):
 # Define a function to handle the "Drop" event
 def handle_drop(event):
     try:
+        #Filepath validator
+        if "{" in event.data and "}" in event.data:
+            event_path = event.data.replace("{","") 
+            event_data_path = event_path.replace("}","")
+        else:
+            event_data_path = event.data
+
+
         # Check if file is a supported image format
-        image_formats = (".jpg", ".jpeg", ".png", ".bmp", ".gif", ".tiff", ".ico")
-        data_formatted = r'%s' % event.data.lower()
-        #data_formatted = event.data.lower()
-        data_formatted = data_formatted.replace(" ","")
+        image_formats = (".jpg", ".jpeg", ".png", ".bmp", ".gif", ".tiff", ".ico",".webp")
+        data_formatted = r'%s' % event_data_path.lower()
         if not data_formatted.endswith(image_formats):
-            print(event.data)
             raise ValueError("Invalid image file format")
-        print(event.data)
+
+
         # Open and display the image
-        img = Image.open(data_formatted)
+        img = Image.open(event_data_path)
         hei = img.size[1]
         wid = img.size[0]
         new_width, new_height = 150, 150
@@ -126,7 +132,7 @@ entryWidget_height.pack(side=TOP, padx=5, pady=10)
 conv_button = ctk.CTkButton(master=root,text="Resize",command=convert)
 conv_button.pack(pady=10)
 
-#################
+
 checkbox_var = ctk.BooleanVar()  # create a variable to store the checkbox state
 checkbox = ctk.CTkCheckBox(master=root, text=f"Aspect Ratio", variable=checkbox_var)  # create the checkbox widget
 #checkbox.place(x=(root_x//2)-10)
