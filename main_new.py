@@ -3,13 +3,15 @@ from tkinterdnd2 import TkinterDnD, DND_ALL
 import customtkinter as ctk
 from PIL import Image, ImageTk
 import os
+import math
 
 class Tk(ctk.CTk, TkinterDnD.DnDWrapper):
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
         self.TkdndVersion = TkinterDnD._require(self)
 
-ctk.set_appearance_mode("dark")
+ctk.set_appearance_mode("system")
+#ctk.set_appearance_mode("dark")
 
 # Define a custom label widget that includes an "image_path" attribute
 class ImageLabel(Label):
@@ -17,18 +19,26 @@ class ImageLabel(Label):
         super().__init__(master, **kwargs)
         self.image_path = ""
 
+def get_aspect_ratio(width, height):
+    gcd = math.gcd(width, height)
+    return f"{int(width/gcd)}:{int(height/gcd)}"
+
 # Define a function to handle the "Drop" event
 def handle_drop(event):
     try:
         # Check if file is a supported image format
         image_formats = (".jpg", ".jpeg", ".png", ".bmp", ".gif", ".tiff", ".ico")
-        if not event.data.lower().endswith(image_formats):
+        data_formatted = r'%s' % event.data.lower()
+        #data_formatted = event.data.lower()
+        data_formatted = data_formatted.replace(" ","")
+        if not data_formatted.endswith(image_formats):
+            print(event.data)
             raise ValueError("Invalid image file format")
-        
+        print(event.data)
         # Open and display the image
-        img = Image.open(event.data)
-        hei = img.size[0]
-        wid = img.size[1]
+        img = Image.open(data_formatted)
+        hei = img.size[1]
+        wid = img.size[0]
         new_width, new_height = 150, 150
         width_ratio = new_width / img.size[0]
         height_ratio = new_height / img.size[1]
@@ -40,17 +50,23 @@ def handle_drop(event):
         default_image_label.image_path = event.data
         
         # Display image resolution
-        resolutionLabel.configure(text=f"{hei} x {wid}")
+        resolutionLabel.configure(text=f"{wid} x {hei}")
+
+        #Aspect ratio
+        ratio = get_aspect_ratio(wid,hei)
+        checkbox.configure(text=f"Aspect Ratio - {ratio}")
+        
     
     except Exception as e:
+        print(e)
         default_image_label.configure(text=str(e))
-        resolutionLabel.configure(text="")
+        resolutionLabel.configure(text="Sorry, invalid image")
 
 def convert():
     try:
         # Get the input image path
         input_path = default_image_label.image_path
-        
+        print(input_path)
         # Check if the input file is a supported image format
         image_formats = (".jpg", ".jpeg", ".png", ".bmp", ".gif", ".tiff", ".ico")
         if not input_path.lower().endswith(image_formats):
@@ -62,12 +78,12 @@ def convert():
             os.makedirs(output_folder)
         
         # Get the new height and width values entered by the user
-        new_height = int(entryWidget.get())
-        new_width = int(entryWidget2.get())
+        new_width = int(entryWidget_width.get())
+        new_height = int(entryWidget_height.get())
         
         # Open the input image and resize it
         img = Image.open(input_path)
-        img = img.resize((new_width, new_height), Image.BICUBIC)
+        img = img.resize((new_width,new_height), Image.BICUBIC)
         
         # Save the resized image in the output folder with the same file name
         output_path = os.path.join(output_folder, os.path.basename(input_path))
@@ -79,30 +95,45 @@ def convert():
         imageLabel.image = img_tk
         
         # Display the new image resolution
-        resolutionLabel.configure(text=f"{new_height} x {new_width}")
+        resolutionLabel.configure(text=f"{new_width} x {new_height}")
+
+        #Aspect ratio
+        ratio = get_aspect_ratio(new_width,new_height)
+        checkbox.configure(text=f"Aspect Ratio - {ratio}")
         
     except Exception as e:
         imageLabel.configure(text=str(e))
-        resolutionLabel.configure(text="")
+        resolutionLabel.configure(text="Sorry, invalid image")
 
 root = Tk()
-root.geometry("350x420")
+root_x = 350
+root_y = 450
+root.geometry(f"{root_x}x{root_y}")
 root.title("DnD Image Resizer")
 header_label = ctk.CTkLabel(master=root,
                                       text='Add image to resize',
                                       font=(None,24))
 header_label.pack(pady=20)
 
-entryWidget = ctk.CTkEntry(master=root, 
-                                    placeholder_text="Enter Height")
-entryWidget.pack(side=TOP, padx=5, pady=10)
-
-entryWidget2 = ctk.CTkEntry(master=root, 
+entryWidget_width = ctk.CTkEntry(master=root, 
                                     placeholder_text="Enter Width")
-entryWidget2.pack(side=TOP, padx=5, pady=10)
+entryWidget_width.pack(side=TOP, padx=5, pady=10)
+
+entryWidget_height = ctk.CTkEntry(master=root, 
+                                    placeholder_text="Enter Height")
+entryWidget_height.pack(side=TOP, padx=5, pady=10)
 
 conv_button = ctk.CTkButton(master=root,text="Resize",command=convert)
 conv_button.pack(pady=10)
+
+#################
+checkbox_var = ctk.BooleanVar()  # create a variable to store the checkbox state
+checkbox = ctk.CTkCheckBox(master=root, text=f"Aspect Ratio", variable=checkbox_var)  # create the checkbox widget
+#checkbox.place(x=(root_x//2)-10)
+checkbox.configure(checkbox_height=0,checkbox_width=0)
+#checkbox.pack(side=BOTTOM)
+checkbox.pack(anchor="center")
+
 
 # Load the default image file and create a PhotoImage object
 default_img = Image.open("drag-drop.png")

@@ -9,7 +9,8 @@ class Tk(ctk.CTk, TkinterDnD.DnDWrapper):
         super().__init__(*args, **kwargs)
         self.TkdndVersion = TkinterDnD._require(self)
 
-ctk.set_appearance_mode("dark")
+ctk.set_appearance_mode("system")
+#ctk.set_appearance_mode("dark")
 
 # Define a custom label widget that includes an "image_path" attribute
 class ImageLabel(Label):
@@ -72,7 +73,7 @@ def convert():
         
         # Open the input image and resize it
         img = Image.open(input_path)
-        img = img.resize((new_width, new_height), Image.BICUBIC)
+        img = img.resize((new_height, new_width ), Image.BICUBIC)
         
         # Save the resized image in the output folder with the same file name
         output_path = os.path.join(output_folder, os.path.basename(input_path))
