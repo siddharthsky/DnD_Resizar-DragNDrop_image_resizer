@@ -11,7 +11,7 @@ class Tk(ctk.CTk, TkinterDnD.DnDWrapper):
         self.TkdndVersion = TkinterDnD._require(self)
 
 ctk.set_appearance_mode("system")
-#ctk.set_appearance_mode("dark")
+
 
 # Define a custom label widget that includes an "image_path" attribute
 class ImageLabel(Label):
