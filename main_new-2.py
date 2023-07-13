@@ -3,20 +3,15 @@ from tkinterdnd2 import TkinterDnD, DND_ALL
 import customtkinter as ctk
 from PIL import Image, ImageTk
 import os
-
-#Local Scripts
-from utils import AspectRatio
-
-#Object Initialization
-Obj_ratio = AspectRatio() 
+from utils import MasterUtils
 
 
+# Drag and Drop Init
 class Tk(ctk.CTk, TkinterDnD.DnDWrapper):
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
         self.TkdndVersion = TkinterDnD._require(self)
 
-ctk.set_appearance_mode("system")
 
 
 # Define a custom label widget that includes an "image_path" attribute
@@ -25,27 +20,14 @@ class ImageLabel(Label):
         super().__init__(master, **kwargs)
         self.image_path = ""
 
-def get_aspect_ratio(width, height):
-    gcd = math.gcd(width, height)
-    return f"{int(width/gcd)}:{int(height/gcd)}"
+#Initializing the Utilities class
+Utils= MasterUtils() 
 
 # Define a function to handle the "Drop" event
 def handle_drop(event):
     try:
         #Filepath validator
-        if "{" in event.data and "}" in event.data:
-            event_path = event.data.replace("{","") 
-            event_data_path = event_path.replace("}","")
-        else:
-            event_data_path = event.data
-
-
-        # Check if file is a supported image format
-        image_formats = (".jpg", ".jpeg", ".png", ".bmp", ".gif", ".tiff", ".ico",".webp")
-        data_formatted = r'%s' % event_data_path.lower()
-        if not data_formatted.endswith(image_formats):
-            raise ValueError("Invalid image file format")
-
+        event_data_path = Utils.file_path_validator(event.data)
 
         # Open and display the image
         img = Image.open(event_data_path)
@@ -65,24 +47,25 @@ def handle_drop(event):
         resolutionLabel.configure(text=f"{wid} x {hei}")
 
         #Aspect ratio
-        ratio = Obj_ratio.get(wid,hei)
+        ratio = Utils.get_aspect_ratio(wid,hei)
         checkbox.configure(text=f"Aspect Ratio - {ratio}")
         
     
     except Exception as e:
-        print(e)
+        #print(e)
         default_image_label.configure(text=str(e))
         resolutionLabel.configure(text="Sorry, invalid image")
 
+
+# This function converte the image to custom resoltion using Pillow 
 def convert():
     try:
         # Get the input image path
-        input_path = default_image_label.image_path
-        print(input_path)
-        # Check if the input file is a supported image format
-        image_formats = (".jpg", ".jpeg", ".png", ".bmp", ".gif", ".tiff", ".ico",".webp")
-        if not input_path.lower().endswith(image_formats):
-            raise ValueError("Invalid image file format")
+        get_input_path = default_image_label.image_path
+        print(get_input_path)
+
+        #Filepath validator
+        input_path = Utils.file_path_validator(get_input_path)
         
         # Get the output folder path
         output_folder = os.path.join(os.path.dirname(input_path), "output")
@@ -107,60 +90,65 @@ def convert():
         imageLabel.image = img_tk
         
         # Display the new image resolution
-        resolutionLabel.configure(text=f"{new_width} x {new_height}")
+        #resolutionLabel.configure(text=f"{new_width} x {new_height}")
+        resolutionLabel.configure(text=f"Resized : {new_width} x {new_height}")
 
         #Aspect ratio
-        ratio = Obj_ratio.get(new_width,new_height)
+        ratio = Utils.get_aspect_ratio(new_width,new_height)
         checkbox.configure(text=f"Aspect Ratio - {ratio}")
         
     except Exception as e:
+        print(e)
         imageLabel.configure(text=str(e))
         resolutionLabel.configure(text="Sorry, invalid image")
 
+
+# GUI Framework Configurations
 root = Tk()
 root_x = 350
 root_y = 450
+ctk.set_appearance_mode("system")
 root.geometry(f"{root_x}x{root_y}")
 root.title("DnD Image Resizar")
 root.iconbitmap(r"resources\root_icon.ico")
-header_label = ctk.CTkLabel(master=root,
-                                      text='Add image to resize',
-                                      font=(None,24))
+
+# Master Header
+header_label = ctk.CTkLabel(master=root, text='Add image to resize', font=(None,24))
 header_label.pack(pady=20)
 
-entryWidget_width = ctk.CTkEntry(master=root, 
-                                    placeholder_text="Enter Width")
+# Width input box
+entryWidget_width = ctk.CTkEntry(master=root, placeholder_text="Enter Width")
 entryWidget_width.pack(side=TOP, padx=5, pady=10)
 
-entryWidget_height = ctk.CTkEntry(master=root, 
-                                    placeholder_text="Enter Height")
+# Height input box
+entryWidget_height = ctk.CTkEntry(master=root, placeholder_text="Enter Height")
 entryWidget_height.pack(side=TOP, padx=5, pady=10)
 
+#Resize Btn
 conv_button = ctk.CTkButton(master=root,text="Resize",command=convert)
 conv_button.pack(pady=10)
 
-
+#Temp. Check box to keep aspect ratio. - (currently disabled)
 checkbox_var = ctk.BooleanVar()  # create a variable to store the checkbox state
 checkbox = ctk.CTkCheckBox(master=root, text=f"Aspect Ratio", variable=checkbox_var)  # create the checkbox widget
-#checkbox.place(x=(root_x//2)-10)
 checkbox.configure(checkbox_height=0,checkbox_width=0)
-#checkbox.pack(side=BOTTOM)
 checkbox.pack(anchor="center")
-
 
 # Load the default image file and create a PhotoImage object
 default_img = Image.open(r"resources\drag-drop.png")
 default_img = default_img.resize((150, 150), Image.BICUBIC)
 default_img_tk = ImageTk.PhotoImage(default_img)
 
-# Create a labelwidget to display the default image
+# Resolution Label to display the default image
 default_image_label = ImageLabel(root, image=default_img_tk, width=150, height=150)
 default_image_label.pack(side=TOP, pady=10)
 default_image_label.image_path = ""
 
+# Resolution Label to display the resolution
 resolutionLabel = Label(root, text = "-SiddharthSky-")
 resolutionLabel.pack(side=TOP, pady=5)
 
+# Create a Image label to display the new image
 imageLabel = Label(root, width=150, height=150)
 imageLabel.pack(side=TOP, pady=10)
 
@@ -168,4 +156,5 @@ imageLabel.pack(side=TOP, pady=10)
 default_image_label.drop_target_register(DND_ALL)
 default_image_label.dnd_bind('<<Drop>>', handle_drop)
 
+# Running
 root.mainloop()
