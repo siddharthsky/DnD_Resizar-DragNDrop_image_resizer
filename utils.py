@@ -1,6 +1,8 @@
 import math
 
+
 class MasterUtils():
+    #Aspect ratio finder
     def get_aspect_ratio(self,width,height):
         gcd = math.gcd(width, height)
         aspect_ratio_str = f"{int(width/gcd)}:{int(height/gcd)}"

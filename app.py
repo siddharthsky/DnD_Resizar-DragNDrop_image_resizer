@@ -97,6 +97,7 @@ def convert():
         checkbox.configure(text=f"Aspect Ratio - {ratio}")
 
     except ValueError:
+        #Invalid text
         resolutionLabel.configure(text="Please enter an integer value.")
         
     except Exception as e:
