@@ -3,7 +3,6 @@ from tkinterdnd2 import TkinterDnD, DND_ALL
 from PIL import Image, ImageTk
 import customtkinter as ctk
 import os
-import sys
 from utils import MasterUtils
 
 # Drag and Drop Init
@@ -20,16 +19,6 @@ class ImageLabel(Label):
 
 #Initializing the Utilities class
 Utils= MasterUtils() 
-
-def resource_path(relative_path):
-    """ Get absolute path to resource, works for dev and for PyInstaller """
-    try:
-        # PyInstaller creates a temp folder and stores path in _MEIPASS
-        base_path = sys._MEIPASS
-    except Exception:
-        base_path = os.path.abspath(".")
-
-    return os.path.join(base_path, relative_path)
 
 # Define a function to handle the "Drop" event
 def handle_drop(event):
@@ -61,7 +50,7 @@ def handle_drop(event):
 
     except Exception as e:
         print(e)
-        default_img = Image.open(resource_path(r"resources\drag-drop-try-again.png"))
+        default_img = Image.open(r"resources\drag-drop-try-again.png")
         default_img_tk = ImageTk.PhotoImage(default_img)
         default_image_label.configure(image=default_img_tk)
         default_image_label.image = default_img_tk
@@ -123,7 +112,7 @@ root_y = 450
 ctk.set_appearance_mode("system")
 root.geometry(f"{root_x}x{root_y}")
 root.title("DnD Image Resizar")
-root.iconbitmap(resource_path(r"resources\root_icon.ico"))
+root.iconbitmap(r"resources\root_icon.ico")
 
 # Master Header
 header_label = ctk.CTkLabel(master=root, text='Add image to resize', font=(None,24))
@@ -148,7 +137,7 @@ checkbox.configure(checkbox_height=0,checkbox_width=0)
 checkbox.pack(anchor="center")
 
 # Load the default image file and create a PhotoImage object
-default_img = Image.open(resource_path(r"resources\drag-drop.png"))
+default_img = Image.open(r"resources\drag-drop.png")
 default_img = default_img.resize((150, 150), Image.BICUBIC)
 default_img_tk = ImageTk.PhotoImage(default_img)
 
