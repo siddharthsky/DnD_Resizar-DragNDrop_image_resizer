@@ -6,6 +6,12 @@ __pycache__/
 #Build
 output/
 
+#HashNetClasses
+.sonic
+*.op.var
+sonic_cache/
+sonic2_mod/
+
 # C extensions
 *.so
 
