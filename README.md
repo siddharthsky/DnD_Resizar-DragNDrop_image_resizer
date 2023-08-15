@@ -11,7 +11,7 @@ This is a simple Python application that allows you to resize images by dragging
 
 
 ### Usage
-1. Open the Executable (Resizar.exe)
+1. Open the Executable (Resizar.exe) 
 
 2. This will open the app in a new window.
    
