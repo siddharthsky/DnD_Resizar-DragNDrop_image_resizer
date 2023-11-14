@@ -78,13 +78,15 @@ def convert():
 
         get_checkbox_aspect = checkbox_var.get()
 
+        img = Image.open(input_path)
+        hei = img.size[1]
+        wid = img.size[0]
 
-
-        if get_checkbox_aspect:
-            img = Image.open(input_path)
-            img = img.resize((new_width,new_height), Image.BICUBIC)
-        else:
-            img = Image.open(input_path)
+        if get_checkbox_aspect: #for true check
+            print("hi siri")
+            new_height_aspect = int((hei/wid)*new_width)
+            img = img.resize((new_width,new_height_aspect), Image.BICUBIC)
+        else: #for false check
             img = img.resize((new_width,new_height), Image.BICUBIC)
             
 
