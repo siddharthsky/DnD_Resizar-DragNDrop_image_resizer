@@ -75,10 +75,22 @@ def convert():
         # Get the new height and width values entered by the user
         new_width = int(entryWidget_width.get())
         new_height = int(entryWidget_height.get())
-        
+
+        get_checkbox_aspect = checkbox_var.get()
+
+
+
+        if get_checkbox_aspect:
+            img = Image.open(input_path)
+            img = img.resize((new_width,new_height), Image.BICUBIC)
+        else:
+            img = Image.open(input_path)
+            img = img.resize((new_width,new_height), Image.BICUBIC)
+            
+
         # Open the input image and resize it
-        img = Image.open(input_path)
-        img = img.resize((new_width,new_height), Image.BICUBIC)
+        #img = Image.open(input_path)
+        #img = img.resize((new_width,new_height), Image.BICUBIC)
         
         # Save the resized image in the output folder with the same file name
         output_path = os.path.join(output_folder, os.path.basename(input_path))
@@ -112,11 +124,11 @@ root_x = 350
 root_y = 450
 ctk.set_appearance_mode("system")
 root.geometry(f"{root_x}x{root_y}")
-root.title("DnD Image Resizar")
+root.title("DnD Image Resizer")
 root.iconbitmap(r"resources\root_icon.ico")
 
 # Master Header
-header_label = ctk.CTkLabel(master=root, text='Add image to resize', font=(None,24))
+header_label = ctk.CTkLabel(master=root, text='Add image to resize', font=(None, 24))
 header_label.pack(pady=20)
 
 # Width input box
@@ -127,14 +139,14 @@ entryWidget_width.pack(side=TOP, padx=5, pady=10)
 entryWidget_height = ctk.CTkEntry(master=root, placeholder_text="Enter Height")
 entryWidget_height.pack(side=TOP, padx=5, pady=10)
 
-#Resize Btn
-conv_button = ctk.CTkButton(master=root,text="Resize",command=convert)
+# Resize Btn
+conv_button = ctk.CTkButton(master=root, text="Resize", command=convert)
 conv_button.pack(pady=10)
 
-#Temp. Check box to keep aspect ratio. - (currently disabled)
+# Temp. Check box to keep aspect ratio
 checkbox_var = ctk.BooleanVar()  # create a variable to store the checkbox state
-checkbox = ctk.CTkCheckBox(master=root, text=f"Aspect Ratio", variable=checkbox_var)  # create the checkbox widget
-checkbox.configure(checkbox_height=0,checkbox_width=0)
+checkbox = ctk.CTkCheckBox(master=root, text=f"Keep Aspect Ratio", variable=checkbox_var)
+checkbox.configure(checkbox_height=16, checkbox_width=16)
 checkbox.pack(anchor="center")
 
 # Load the default image file and create a PhotoImage object
@@ -148,10 +160,10 @@ default_image_label.pack(side=TOP, pady=10)
 default_image_label.image_path = ""
 
 # Resolution Label to display the resolution
-resolutionLabel = Label(root, text = "-SiddharthSky-")
+resolutionLabel = Label(root, text="-SiddharthSky-")
 resolutionLabel.pack(side=TOP, pady=5)
 
-# Create a Image label to display the new image
+# Create an Image label to display the new image
 imageLabel = Label(root, width=150, height=150)
 imageLabel.pack(side=TOP, pady=10)
 
@@ -161,3 +173,4 @@ default_image_label.dnd_bind('<<Drop>>', handle_drop)
 
 # Running
 root.mainloop()
+
