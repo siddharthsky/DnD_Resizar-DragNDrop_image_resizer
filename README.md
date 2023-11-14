@@ -36,7 +36,7 @@ For running the python code install the requirements.<br>
   <img src="https://i.imgur.com/eSRzG5y.png">
 
 ### Future
-- Adding an option to keep aspect ratio.<br>
+- ~~Adding an option to keep aspect ratio~~ <br>
 - Cross image format conversion (png>jpeg, ico>bmp)
 
 ### Image formats supported.
