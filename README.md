@@ -26,7 +26,7 @@ This is a simple Python application that allows you to resize images by dragging
 > [!NOTE]  
 > Executable is only available for Windows 8 and above.
 
-> [!WARNING]  
+> [!NOTE]  
 > To use Resizar on other platforms run `app.py`
 
 ### Requirements<br>
